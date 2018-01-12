@@ -1,3 +1,5 @@
-esp.data <- read.csv('adult-data.csv')
-hist(esp.data$has.autism.correct.response, breaks=0:18)
-
+adult.data <- read.csv('adult-data.csv')
+plot(adult.data$gender)
+plot(adult.data$has.autism.correct.response)
+plot(adult.data$country.of.residence)
+install.packages("e1071")
