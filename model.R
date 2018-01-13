@@ -5,11 +5,10 @@ plot(adult.data$gender)
 library(e1071)
 library(caTools)
 
-first = c(unname(adult.data[1,])) #output is what you i sent you, and the list of 21
-length(first) #output is 21 (which is correct)
-is.vector(first) #output is true
+first = c(unname(adult.data[1,])) 
+length(first) 
+is.vector(first) 
 first
-
 
 c(1,1,1,1,1,0,0,1,1,0,0,26,"f","White-European","no","no","United States","no",6,18,"and","more","Self","NO")
 
@@ -26,4 +25,12 @@ str(adult.data)
 round(prop.table(table(adult.data$a1.score))*100, digits = 1)
 adult.data$a1.score = factor(adult.data$a1.score)
 
+
+length(adult.data)
+
+for (i in 1:10) {
+  round(prop.table(table(adult.data[i,]))*100, digits = 1)
+}
+
+?rep()
 
