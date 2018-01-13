@@ -1,14 +1,10 @@
 install.packages("e1071")
 install.packages("caTools")
-install.packages("gmodels")
-library(gmodels)
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
 library(e1071)
 library(caTools)
 
-adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
-
 ########################
-
 str(adult.data)
 round(prop.table(table(adult.data$a1.score))*100, digits = 1)
 
@@ -18,13 +14,12 @@ for (i in 1:10) {
   round(prop.table(table(adult.data[i,]))*100, digits = 1)
 }
 
-for (i in 1:nrow(adult.data)) {
-  if (adult.data[i,11] == "?") {
-    adult.data[i,11] = NA
-  }
-}
+####
 
-adult.data$age <- as.integer(adult.data$age)
+
+for(i in 1:11){
+  adult.data[,i] <- as.integer(adult.data[,i])
+}
 
 adult.data$gender <- as.factor(adult.data$gender)
 levels(adult.data$gender)
@@ -86,6 +81,7 @@ levels(adult.data$pdd.family.history)
 adult.data <- adult.data[sample(nrow(adult.data)),]
 adult.data
 
+
 threeFourths <- round(704*.75)
 threeFourths
 adult.data.train = adult.data[1:threeFourths, ] # about 75%
@@ -102,7 +98,9 @@ adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.aut
 adult.test.predicted = predict(adult.classifier,
                              adult.data.test[, 1:19])
 
-#CrossTable() is from gmodels
+# once again we'll use CrossTable() from gmodels
+install.packages("gmodels")
+library(gmodels)
 CrossTable(adult.test.predicted,
            adult.data.test[,20],
            prop.chisq = FALSE, # as before
@@ -111,8 +109,19 @@ CrossTable(adult.test.predicted,
 
 # 100 - (5 / 704) = %99.9929  ---- this is the accuracy of the first train/test run
 
+# DO I NEED LAPLACE? UNSURE - INVESTIGATE FURTHER LATER
+# store our model in adult.classifier
+adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response, laplace = 1)
+adult.test.predicted = predict(adult.classifier,
+                               adult.data.test[, 1:19])
+
+# once again we'll use CrossTable() from gmodels
+# install.packages("gmodels")
+library(gmodels)
+CrossTable(adult.test.predicted,
+           adult.data.test[,20],
+           prop.chisq = FALSE, # as before
+           prop.t     = FALSE, # eliminate cell proprtions
+           dnn        = c("predicted", "actual")) # relabels rows+cols
 adult.classifier$apriori
 adult.classifier$tables # learn how to interpret these tables
-
-
-##############
