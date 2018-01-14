@@ -1,5 +1,3 @@
-"a1.score", "a2.score", "a3.score", "a4.score", "a5.score", "a6.score", "a7.score", "a8.score", "a9.score", "a10.score", "age", "gender", "ethnicity", "born.with.jaundice", "pdd.family.history", "country.of.residence", "screened.before", "score.of.aq10.adult", "age.category", "who.completing.test", "has.autism.correct.response"
-
 1,1,1,1,0,0,1,1,0,0,26,"f","White-European","no","no","United States","no",6,"18 and more","Self","NO"
 1,1,0,1,0,0,0,1,0,1,24,"m","Latino","no","yes","Brazil","no",5,"18 and more","Self","NO"
 1,1,0,1,1,0,1,1,1,1,27,"m","Latino","yes","yes","Spain","no",8,"18 and more","Parent","YES"
