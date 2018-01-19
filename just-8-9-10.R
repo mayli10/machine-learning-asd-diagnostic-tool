@@ -24,14 +24,7 @@ colnames(adult.data) <- c("a1.score", "a2.score", "a3.score", "a4.score", "a5.sc
                           "born.with.jaundice", "pdd.family.history", "country.of.residence", 
                           "screened.before", "score.of.aq10.adult", "age.category", "who.completing.test", 
                           "has.autism.correct.response")
-for (j in 1:8) {
-  for (i in 1:nrow(adult.data)) {
-    if (adult.data[i,j] == 1) {
-      adult.data[i,j] = 'done'
-      adult.data[i,18] = adult.data[i,18] - 1
-    }
-  }
-}
+
 str(adult.data)
 
 
@@ -42,13 +35,13 @@ adult.data$a4.score <- NULL
 adult.data$a5.score <- NULL
 adult.data$a6.score <- NULL
 adult.data$a7.score <- NULL
-adult.data$a8.score <- NULL
 adult.data$pdd.family.history <- NULL
 adult.data$born.with.jaundice <- NULL
 adult.data$ethnicity <- NULL
 adult.data$age <- NULL
 adult.data$gender <- NULL
 adult.data$country.of.residence <- NULL
+adult.data$score.of.aq10.adult <- NULL
 adult.data$screened.before <- NULL
 adult.data$age.category <- NULL
 adult.data$who.completing.test <- NULL
@@ -113,9 +106,6 @@ for (i in 1:nrow(adult.data)) {
 
 adult.data$has.autism.correct.response <- as.factor(adult.data$has.autism.correct.response)
 
-
-
-
 str(adult.data)
 
 ########## Splitting Data into Testing & Training Sets ##########
@@ -157,17 +147,17 @@ CrossTable(adult.test.predicted,
 
 #predicted to actual:
 #(Y/Y + N/N) / (Y/Y + N/N + Y/N + N/Y)
-a = (39+117)/(39+117+9+11) 
-b = (47+114)/(47+114+9+6) 
-c = (33+118)/(33+118+12+13) 
-d = (33+116)/(33+116+15+12) 
-e = (33+114)/(33+114+16+13) 
-f = (30+117)/(30+117+12+17) 
-g = (37+119)/(37+119+6+14) 
-h = (27+121)/(27+121+11+17) 
-i = (40+108)/(40+108+12+16) 
-j = (31+116)/(31+116+12+17) 
+a = (37+113)/(37+113+7+19) 
+b = (34+117)/(34+117+8+17) 
+c = (32+120)/(32+120+8+16) 
+d = (33+115)/(33+115+19+9) 
+e = (32+122)/(32+122+7+15) 
+f = (34+123)/(34+123+8+11) 
+g = (31+125)/(31+125+9+11) 
+h = (34+117)/(34+117+9+16) 
+i = (31+121)/(31+121+11+13) 
+j = (39+119)/(39+119+8+10)
 c(a, b, c, d, e, f, g, h, i, j)
-#0.8863636 0.9147727 0.8579545 0.8465909 0.8352273 0.8352273 0.8863636 0.8409091 0.8409091 0.8352273
+#0.8750000 0.8579545 0.8636364 0.8409091 0.8750000 0.8920455 0.8863636 0.8579545 0.8636364 0.8977273
 avg = (a+b+c+d+e+f+g+h+i+j)/10
-avg #0.8579545
+avg #0.8710227
