@@ -89,62 +89,43 @@ for (i in 1:nrow(adult.data)) {
   }
 }
 
-adult.data$age <- as.integer(adult.data$age)
-
-adult.data$gender <- as.factor(adult.data$gender)
-levels(adult.data$gender)
-
-names.vec <- names(adult.data)
-names.vec
-#gender, ethnicity, born.with.jaundice, pdd.family.history, country.of.residence, screened.before, who.completing.test, has.autism.correct.response
-names.vec[c(12,13,14,15,16,17,19,20)]
-
-
-for(i in c(12,13,14,15,16,17,19,20)){
-  adult.data[,i] <- as.factor(adult.data[,i])
-}
-levels(adult.data)
-
-str(adult.data)
-table(adult.data$ethnicity)
-
+#if there is a "?" in ethnicity, put the value into Others category
 for(i in which(adult.data$ethnicity == "?")){
   adult.data$ethnicity[i]  <- 'Others'
 }
-adult.data$ethnicity[658]
-levels(adult.data[,13])
-
-adult.data$ethnicity
-adult.data <- droplevels(adult.data)
-levels(adult.data[,13])
-adult.data <- droplevels(adult.data)
-levels(adult.data[,13])
 which(adult.data$ethnicity == "?")
+str(adult.data)
 
-levels(adult.data$who.completing.test)
-#View(adult.data)
-
-levels(adult.data$who.completing.test)
-table(adult.data$who.completing.test)
-
-for(i in which(adult.data$who.completing.test == "?")) {
-  adult.data$who.completing.test[i] <- NA
+#if there is a "?" in who.completing.test, set the value to be NA
+for(i in which(adult.data$who.completing.test == "?")){
+  adult.data$who.completing.test[i]  <- NA
 }
+which(adult.data$ethnicity == "?")
+str(adult.data)
 
-levels(adult.data$who.completing.test)
-adult.data <- droplevels(adult.data)
-levels(adult.data$who.completing.test)
+#check if there are any ? left in the data
+which(adult.data == "?")
 
-for(i in which(adult.data$who.completing.test == "?")) {
-  adult.data$who.completing.test[i] <- NA
+### Setting factors and integers ### 
+
+#set the age value to be an integer
+adult.data$age <- as.integer(adult.data$age)
+
+levels(adult.data$gender)
+
+#get the non-numeric features
+names.vec <- names(adult.data)
+
+#gender, ethnicity, born.with.jaundice, pdd.family.history, country.of.residence, screened.before, who.completing.test, has.autism.correct.response
+names <- names.vec[c(12,13,14,15,16,17,19,20)]
+
+#set the non-numeric features as factors
+for(i in c(12,13,14,15,16,17,19,20)){
+  adult.data[,i] <- as.factor(adult.data[,i])
 }
-
-levels(adult.data$who.completing.test)
-adult.data <- droplevels(adult.data)
-levels(adult.data$who.completing.test)
-
-levels(adult.data$born.with.jaundice)
-levels(adult.data$pdd.family.history)
+#check the data to see that this has updated
+levels(adult.data)
+str(adult.data)
 
 ########## Splitting Data into Testing & Training Sets ##########
 
@@ -152,38 +133,39 @@ levels(adult.data$pdd.family.history)
 adult.data <- adult.data[sample(nrow(adult.data)),]
 adult.data
 
+#train the model on 75% of data and test the model on 25% of the data
 threeFourths <- round(703*.75)
 threeFourths
 adult.data.train = adult.data[1:threeFourths, ] # about 75%
 adult.data.test  = adult.data[(threeFourths+1):nrow(adult.data), ] # the rest
 
-typeof(adult.data$a1.score)
-adult.data$a1.score
-
+#check and see if the number of test and train data are similar for both
 round(prop.table(table(adult.data.train$has.autism.correct.response))*100)
-round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they are similar
+round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #yes, they are similar
 
 
 ########## Using Bayes theorem ##########
 
 # Storing model in adult.classifier
-# train data
+# train data using Bayes theorem which is p(A|B) = (p(B|A)*p(A)) / p(B)
 #View(adult.data)
 adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
 
-#test data
+#test data with the predict function using the trained data
 adult.test.predicted = predict(adult.classifier,
                              adult.data.test[, 1:19])
 
 ########## Analyzing Results ##########
 
-#CrossTable() is from gmodels
+#CrossTable() is from gmodels, displays results
 CrossTable(adult.test.predicted,
            adult.data.test[,20],
            prop.chisq = FALSE, # as before
            prop.t     = FALSE, # eliminate cell proprtions
            dnn        = c("predicted", "actual")) # relabels rows+cols
 
+
+### Trained and tested 10 rounds and found the prediction accuracy of the model ###
 
 #predicted to actual:
 #(Y/Y + N/N) / (Y/Y + N/N + Y/N + N/Y)
@@ -199,12 +181,10 @@ i = (43+129)/(43+129+2+2) #0.977727
 
 j = (44+129)/(44+129+2+1) #0.9829545
 avg = (a+b+c+d+e+f+g+h+i+j)/10
-avg #0.980113636
+#avg = 0.980113636
 
+#The model predicted if a user has autism at an average accuracy of 98%
 
-
-# (40 + 132) / (40 + 132 + 4) = %97.72727  ---- this is the accuracy of the first train/test run
-
+##### More information on individual features #####
 adult.classifier$apriori
-adult.classifier$tables # learn how to interpret these tables
-
+adult.classifier$tables 
