@@ -1,0 +1,512 @@
+install.packages("gmodels")
+str(adult.data)
+round(prop.table(table(adult.data$a1.score))*100, digits = 1)
+length(adult.data)
+for (i in 1:10) {
+round(prop.table(table(adult.data[i,]))*100, digits = 1)
+}
+install.packages("gmodels")
+for (i in 1:nrow(adult.data)) {
+if (adult.data[i,11] == "?") {
+adult.data[i,11] = NA
+}
+}
+for(i in 1:nrow(adult.data)){
+ages[i]<-as.integer(adult.data$age[i])
+}
+adult.data$gender <- as.factor(adult.data$gender)
+levels(adult.data$gender)
+adult.data$gender <- as.factor(adult.data$gender)
+adult.data$age.category <- NULL
+names.vec <- names(adult.data)
+names.vec
+names.vec[c(12,13,14,15,16,17,19,20)]
+for(i in c(12,13,14,15,16,17,19,20)){
+adult.data[,i] <- as.factor(adult.data[,i])
+}
+levels(adult.data[,13])
+str(adult.data)
+table(adult.data$ethnicity)
+for(i in which(adult.data$ethnicity == "?")){
+adult.data$ethnicity[i]  <- 'Others'
+}
+adult.data$ethnicity[658]
+levels(adult.data[,13])
+adult.data$ethnicity
+adult.data <- droplevels(adult.data)
+levels(adult.data[,13])
+adult.data <- droplevels(adult.data)
+levels(adult.data[,13])
+which(adult.data$ethnicity == "?")
+View(adult.data)
+levels(adult.data$who.completing.test)
+table(adult.data$who.completing.test)
+for(i in which(adult.data$who.completing.test == "?")) {
+adult.data$who.completing.test[i] <- NA
+}
+levels(adult.data$who.completing.test)
+adult.data <- droplevels(adult.data)
+levels(adult.data$who.completing.test)
+for(i in which(adult.data$who.completing.test == "?")) {
+adult.data$who.completing.test[i] <- NA
+}
+levels(adult.data$who.completing.test)
+adult.data <- droplevels(adult.data)
+levels(adult.data$who.completing.test)
+levels(adult.data$born.with.jaundice)
+levels(adult.data$pdd.family.history)
+adult.data <- adult.data[sample(nrow(adult.data)),]
+adult.data
+threeFourths <- round(704*.75)
+threeFourths
+adult.data.train = adult.data[1:threeFourths, ] # about 75%
+adult.data.test  = adult.data[(threeFourths+1):nrow(adult.data), ] # the rest
+typeof(adult.data$a1.score)
+adult.data$a1.score
+round(prop.table(table(adult.data.train$has.autism.correct.response))*100)
+round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they are similar
+adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
+adult.test.predicted = predict(adult.classifier,
+adult.data.test[, 1:19])
+CrossTable(adult.test.predicted,
+adult.data.test[,20],
+prop.chisq = FALSE, # as before
+prop.t     = FALSE, # eliminate cell proprtions
+dnn        = c("predicted", "actual")) # relabels rows+cols
+adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response, laplace = 1)
+adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
+adult.test.predicted = predict(adult.classifier,
+adult.data.test[, 1:19])
+threeFourths <- round(704*.75)
+threeFourths
+adult.data.train = adult.data[1:threeFourths, ] # about 75%
+adult.data.test  = adult.data[(threeFourths+1):nrow(adult.data), ] # the rest
+typeof(adult.data$a1.score)
+adult.data$a1.score
+round(prop.table(table(adult.data.train$has.autism.correct.response))*100)
+round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they are similar
+adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
+adult.test.predicted = predict(adult.classifier,
+adult.data.test[, 1:19])
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
+########################
+str(adult.data)
+round(prop.table(table(adult.data$a1.score))*100, digits = 1)
+length(adult.data)
+for (i in 1:10) {
+round(prop.table(table(adult.data[i,]))*100, digits = 1)
+}
+for (i in 1:nrow(adult.data)) {
+if (adult.data[i,11] == "?") {
+adult.data[i,11] = NA
+}
+}
+for(i in 1:nrow(adult.data)){
+ages[i]<-as.integer(adult.data$age[i])
+}
+adult.data$gender <- as.factor(adult.data$gender)
+levels(adult.data$gender)
+adult.data$gender <- as.factor(adult.data$gender)
+adult.data$age.category <- NULL
+names.vec <- names(adult.data)
+names.vec
+names.vec[c(12,13,14,15,16,17,19,20)]
+for(i in c(12,13,14,15,16,17,19,20)){
+adult.data[,i] <- as.factor(adult.data[,i])
+}
+levels(adult.data[,13])
+str(adult.data)
+table(adult.data$ethnicity)
+for(i in which(adult.data$ethnicity == "?")){
+adult.data$ethnicity[i]  <- 'Others'
+}
+adult.data$ethnicity[658]
+levels(adult.data[,13])
+adult.data$ethnicity
+adult.data <- droplevels(adult.data)
+levels(adult.data[,13])
+adult.data <- droplevels(adult.data)
+levels(adult.data[,13])
+which(adult.data$ethnicity == "?")
+View(adult.data)
+levels(adult.data$who.completing.test)
+table(adult.data$who.completing.test)
+for(i in which(adult.data$who.completing.test == "?")) {
+adult.data$who.completing.test[i] <- NA
+}
+levels(adult.data$who.completing.test)
+adult.data <- droplevels(adult.data)
+levels(adult.data$who.completing.test)
+for(i in which(adult.data$who.completing.test == "?")) {
+adult.data$who.completing.test[i] <- NA
+}
+levels(adult.data$who.completing.test)
+adult.data <- droplevels(adult.data)
+levels(adult.data$who.completing.test)
+levels(adult.data$born.with.jaundice)
+levels(adult.data$pdd.family.history)
+## DATA  IS CLEANED
+adult.data <- adult.data[sample(nrow(adult.data)),]
+adult.data
+threeFourths <- round(704*.75)
+threeFourths
+adult.data.train = adult.data[1:threeFourths, ] # about 75%
+adult.data.test  = adult.data[(threeFourths+1):nrow(adult.data), ] # the rest
+typeof(adult.data$a1.score)
+adult.data$a1.score
+round(prop.table(table(adult.data.train$has.autism.correct.response))*100)
+round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they are similar
+adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
+adult.test.predicted = predict(adult.classifier,
+adult.data.test[, 1:19])
+View(adult.data)
+for(i in 1:nrow(adult.data)){
+adult.data$age[i]<-as.integer(adult.data$age[i])
+}
+adult.data$age <- as.integer(adult.data$age)
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
+########################
+str(adult.data)
+round(prop.table(table(adult.data$a1.score))*100, digits = 1)
+length(adult.data)
+for (i in 1:10) {
+round(prop.table(table(adult.data[i,]))*100, digits = 1)
+}
+for (i in 1:nrow(adult.data)) {
+if (adult.data[i,11] == "?") {
+adult.data[i,11] = NA
+}
+}
+adult.data$age <- as.integer(adult.data$age)
+adult.data$gender <- as.factor(adult.data$gender)
+levels(adult.data$gender)
+adult.data$gender <- as.factor(adult.data$gender)
+adult.data$age.category <- NULL
+names.vec <- names(adult.data)
+names.vec
+names.vec[c(12,13,14,15,16,17,19,20)]
+for(i in c(12,13,14,15,16,17,19,20)){
+adult.data[,i] <- as.factor(adult.data[,i])
+}
+levels(adult.data[,13])
+str(adult.data)
+table(adult.data$ethnicity)
+for(i in which(adult.data$ethnicity == "?")){
+adult.data$ethnicity[i]  <- 'Others'
+}
+adult.data$ethnicity[658]
+levels(adult.data[,13])
+adult.data$ethnicity
+adult.data <- droplevels(adult.data)
+levels(adult.data[,13])
+adult.data <- droplevels(adult.data)
+levels(adult.data[,13])
+which(adult.data$ethnicity == "?")
+View(adult.data)
+levels(adult.data$who.completing.test)
+table(adult.data$who.completing.test)
+for(i in which(adult.data$who.completing.test == "?")) {
+adult.data$who.completing.test[i] <- NA
+}
+levels(adult.data$who.completing.test)
+adult.data <- droplevels(adult.data)
+levels(adult.data$who.completing.test)
+for(i in which(adult.data$who.completing.test == "?")) {
+adult.data$who.completing.test[i] <- NA
+}
+levels(adult.data$who.completing.test)
+adult.data <- droplevels(adult.data)
+levels(adult.data$who.completing.test)
+levels(adult.data$born.with.jaundice)
+levels(adult.data$pdd.family.history)
+## DATA  IS CLEANED
+adult.data <- adult.data[sample(nrow(adult.data)),]
+adult.data
+threeFourths <- round(704*.75)
+threeFourths
+adult.data.train = adult.data[1:threeFourths, ] # about 75%
+adult.data.test  = adult.data[(threeFourths+1):nrow(adult.data), ] # the rest
+typeof(adult.data$a1.score)
+adult.data$a1.score
+round(prop.table(table(adult.data.train$has.autism.correct.response))*100)
+round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they are similar
+# store our model in adult.classifier
+adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
+adult.test.predicted = predict(adult.classifier,
+adult.data.test[, 1:19])
+adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
+adult.test.predicted = predict(adult.classifier,
+adult.data.test[, 1:19])
+CrossTable(adult.test.predicted,
+adult.data.test[,20],
+prop.chisq = FALSE, # as before
+prop.t     = FALSE, # eliminate cell proprtions
+dnn        = c("predicted", "actual")) # relabels rows+cols
+adult.classifier$apriori
+adult.classifier$tables # learn how to interpret these tables
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
+str(adult.data)
+str(adult.data)
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
+summary(adult.data)
+strtable(adult.data)
+dput(adult.data)
+str(adult.data)
+summary(adult.data)
+round(prop.table(table(adult.data$a1.score))*100, digits = 1)
+for (i in 1:10) {
+round(prop.table(table(adult.data[i,]))*100, digits = 1)
+}
+white <- for (i in 1:10) {
+round(prop.table(table(adult.data[i,]))*100, digits = 1)
+}
+white
+round(prop.table(table(adult.data$has.autism.correct.response))*100, digits = 1)
+View(adult.data)
+round(prop.table(table(adult.data$age))*100, digits = 1)
+round(prop.table(table(adult.data$gender))*100, digits = 1)
+round(prop.table(table(adult.data$gender))*100, digits = 1)
+round(prop.table(table(adult.data$born.with.jaundice))*100, digits = 1)
+round(prop.table(table(adult.data$pdd.family.history))*100, digits = 1)
+round(prop.table(table(adult.data$screened.before))*100, digits = 1)
+round(prop.table(table(adult.data$score.of.aq10.adult))*100, digits = 1)
+round(prop.table(table(adult.data$who.completing.test))*100, digits = 1)
+round(prop.table(table(adult.data$has.autism.correct.response))*100, digits = 1)
+adult.data <- adult.data[sample(nrow(adult.data)),]
+adult.data
+str(adult.data)
+summary(adult.data)
+View(adult.data)
+View(adult.data)
+round(prop.table(table(adult.data$gender))*100, digits = 1)
+round(prop.table(table(adult.data$born.with.jaundice))*100, digits = 1)     #
+round(prop.table(table(adult.data$pdd.family.history))*100, digits = 1)
+round(prop.table(table(adult.data$screened.before))*100, digits = 1)
+round(prop.table(table(adult.data$score.of.aq10.adult))*100, digits = 1)
+round(prop.table(table(adult.data$who.completing.test))*100, digits = 1)
+round(prop.table(table(adult.data$has.autism.correct.response))*100, digits = 1)
+length(adult.data)
+adult.classifier$apriori
+adult.classifier$tables # learn how to interpret these tables
+adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
+adult.test.predicted = predict(adult.classifier,
+adult.data.test[, 1:19])
+CrossTable(adult.test.predicted,
+adult.data.test[,20],
+prop.chisq = FALSE, # as before
+prop.t     = FALSE, # eliminate cell proprtions
+dnn        = c("predicted", "actual")) # relabels rows+cols
+adult.classifier$apriori
+adult.classifier$tables # learn how to interpret these tables
+length(adult.data)
+adult.data$age <- as.integer(adult.data$age)
+adult.data$age.category <- NULL
+for (i in 1:nrow(adult.data)) {
+if (adult.data[i,11] == "?") {
+adult.data[i,11] = NA
+}
+}
+#gmodels package for fitting models & displaying results
+library(gmodels)
+#e1071 package for naive Bayes theorem & other functions
+library(e1071)
+#caTools package for splitting train / test data
+library(caTools)
+###### Exploring the Raw Data ######
+#reads raw data from adult.data.csv into a data frame and prevents strings from becoming factors
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
+#displays internal structure of adult.data
+str(adult.data)
+#further investigating data with a summary to see if anything else needs to be noted
+summary(adult.data)
+#view data in data frame
+View(adult.data)
+### Proportion Tables of Features ###
+round(prop.table(table(adult.data$gender))*100, digits = 1)  # female:47.9%  male:52.1%
+round(prop.table(table(adult.data$born.with.jaundice))*100, digits = 1)  # no: 90.2%  yes: 9.8%
+round(prop.table(table(adult.data$pdd.family.history))*100, digits = 1)  # no: 87.1%  yes: 12.9%
+round(prop.table(table(adult.data$screened.before))*100, digits = 1)  # no: 98.3%  yes: 1.7%
+round(prop.table(table(adult.data$score.of.aq10.adult))*100, digits = 1)  # highest % of scores are in range of 2-5
+round(prop.table(table(adult.data$who.completing.test))*100, digits = 1)  # Self: 74.1%
+round(prop.table(table(adult.data$has.autism.correct.response))*100, digits = 1)  # NO: 73.2%  YES: 26.8%
+# current length of raw data is 21 variables (columns)
+length(adult.data)
+###### Cleaning the Raw Data ######
+# Since all variables in the age.category is "18 and more", this data is not useful for model
+adult.data$age.category <- NULL
+length(adult.data)
+for (i in 1:nrow(adult.data)) {
+if (adult.data[i,11] == "?") {
+adult.data[i,11] = NA
+}
+}
+adult.data$age <- as.integer(adult.data$age)
+adult.data$gender <- as.factor(adult.data$gender)
+levels(adult.data$gender)
+& displaying results
+library(gmodels)
+#e1071 package for naive Bayes theorem & other functions
+library(e1071)
+#caTools package for splitting train / test data
+library(caTools)
+########## Exploring the Raw Data ##########
+#reads raw data from adult.data.csv into a data frame and prevents strings from becoming factors
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
+#displays internal structure of adult.data
+str(adult.data)
+#further investigating data with a summary to see if anything else needs to be noted
+summary(adult.data)
+#view data in data frame
+View(adult.data)
+### Proportion Tables of Features ###
+round(prop.table(table(adult.data$gender))*100, digits = 1)  # female:47.9%  male:52.1%
+round(prop.table(table(adult.data$born.with.jaundice))*100, digits = 1)  # no: 90.2%  yes: 9.8%
+round(prop.table(table(adult.data$pdd.family.history))*100, digits = 1)  # no: 87.1%  yes: 12.9%
+round(prop.table(table(adult.data$screened.before))*100, digits = 1)  # no: 98.3%  yes: 1.7%
+round(prop.table(table(adult.data$score.of.aq10.adult))*100, digits = 1)  # highest % of scores are in range of 2-5
+round(prop.table(table(adult.data$who.completing.test))*100, digits = 1)  # Self: 74.1%
+round(prop.table(table(adult.data$has.autism.correct.response))*100, digits = 1)  # NO: 73.2%  YES: 26.8%
+# current length of raw data is 21 variables (columns)
+length(adult.data)
+########## Cleaning the Raw Data ##########
+# Since all variables in the age.category is "18 and more", this data is not useful for model
+adult.data$age.category <- NULL
+# updated length of data is now 20 variables (columns)
+length(adult.data)
+###
+# iterate through all the rows
+for (i in 1:nrow(adult.data)) {
+if (adult.data[i,11] == "?") {
+adult.data[i,11] = NA
+}
+}
+adult.data$age <- as.integer(adult.data$age)
+adult.data$gender <- as.factor(adult.data$gender)
+levels(adult.data$gender)
+adult.data$gender <- as.factor(adult.data$gender)
+names.vec <- names(adult.data)
+names.vec
+names.vec[c(12,13,14,15,16,17,19,20)]
+for(i in c(12,13,14,15,16,17,19,20)){
+adult.data[,i] <- as.factor(adult.data[,i])
+}
+levels(adult.data[,13])
+str(adult.data)
+table(adult.data$ethnicity)
+for(i in which(adult.data$ethnicity == "?")){
+adult.data$ethnicity[i]  <- 'Others'
+}
+adult.data$ethnicity[658]
+levels(adult.data[,13])
+adult.data$ethnicity
+adult.data <- droplevels(adult.data)
+levels(adult.data[,13])
+adult.data <- droplevels(adult.data)
+levels(adult.data[,13])
+which(adult.data$ethnicity == "?")
+View(adult.data)
+levels(adult.data$who.completing.test)
+table(adult.data$who.completing.test)
+for(i in which(adult.data$who.completing.test == "?")) {
+adult.data$who.completing.test[i] <- NA
+}
+levels(adult.data$who.completing.test)
+adult.data <- droplevels(adult.data)
+levels(adult.data$who.completing.test)
+for(i in which(adult.data$who.completing.test == "?")) {
+adult.data$who.completing.test[i] <- NA
+}
+levels(adult.data$who.completing.test)
+adult.data <- droplevels(adult.data)
+levels(adult.data$who.completing.test)
+levels(adult.data$born.with.jaundice)
+levels(adult.data$pdd.family.history)
+########## Splitting Data into Testing & Training Sets ##########
+#reorders and randomizes the rows so that I take different training and testing data sets
+adult.data <- adult.data[sample(nrow(adult.data)),]
+adult.data
+threeFourths <- round(704*.75)
+threeFourths
+adult.data.train = adult.data[1:threeFourths, ] # about 75%
+adult.data.test  = adult.data[(threeFourths+1):nrow(adult.data), ] # the rest
+typeof(adult.data$a1.score)
+adult.data$a1.score
+round(prop.table(table(adult.data.train$has.autism.correct.response))*100)
+round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they are similar
+# Using Bayes theorem to calculate
+# Storing model in adult.classifier
+adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
+adult.test.predicted = predict(adult.classifier,
+adult.data.test[, 1:19])
+#CrossTable() is from gmodels
+CrossTable(adult.test.predicted,
+adult.data.test[,20],
+prop.chisq = FALSE, # as before
+prop.t     = FALSE, # eliminate cell proprtions
+dnn        = c("predicted", "actual")) # relabels rows+cols
+# 100 - (5 / 704) = %99.9929  ---- this is the accuracy of the first train/test run
+adult.classifier$apriori
+adult.classifier$tables # learn how to interpret these tables
+##########
+round(prop.table(table(adult.data.train$has.autism.correct.response))*100)
+round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they are similar
+adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
+adult.test.predicted = predict(adult.classifier,
+adult.data.test[, 1:19])
+CrossTable(adult.test.predicted,
+adult.data.test[,20],
+prop.chisq = FALSE, # as before
+prop.t     = FALSE, # eliminate cell proprtions
+dnn        = c("predicted", "actual")) # relabels rows+cols
+adult.classifier$apriori
+adult.classifier$tables # learn how to interpret these tables
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
+levels(adult.data$who.completing.test)
+levels(adult.data$who.completing.test)
+levels(adult.data[,13])
+adult.data <- droplevels(adult.data)
+levels(adult.data$who.completing.test)
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
+str(adult.data)
+summary(adult.data)
+View(adult.data)
+colnames(adult.data) <- c("a1.score")
+adult.data <- read.csv('adult-data.csv', stringsAsFactors = FALSE)
+str(adult.data)
+summary(adult.data)
+View(adult.data)
+colnames(adult.data) <- c("a1.score", "a2.score", "a3.score", "a4.score", "a5.score", "a6.score",
+"a7.score", "a8.score", "a9.score", "a10.score", "age", "gender", "ethnicity",
+"born.with.jaundice", "pdd.family.history", "country.of.residence",
+"screened.before", "score.of.aq10.adult", "age.category", "who.completing.test",
+"has.autism.correct.response")
+str(adult.data)
+summary(adult.data)
+View(adult.data)
+round(prop.table(table(adult.data$gender))*100, digits = 1)  # female:47.9%  male:52.1%
+round(prop.table(table(adult.data$born.with.jaundice))*100, digits = 1)  # no: 90.2%  yes: 9.8%
+round(prop.table(table(adult.data$pdd.family.history))*100, digits = 1)  # no: 87.1%  yes: 12.9%
+round(prop.table(table(adult.data$screened.before))*100, digits = 1)  # no: 98.3%  yes: 1.7%
+round(prop.table(table(adult.data$score.of.aq10.adult))*100, digits = 1)  # highest % of scores are in range of 2-5
+round(prop.table(table(adult.data$gender))*100, digits = 1)  # female:47.8%  male:52.2%
+round(prop.table(table(adult.data$born.with.jaundice))*100, digits = 1)  # no: 90.2%  yes: 9.8%
+round(prop.table(table(adult.data$pdd.family.history))*100, digits = 1)  # no: 87.1%  yes: 12.9%
+round(prop.table(table(adult.data$screened.before))*100, digits = 1)  # no: 98.3%  yes: 1.7%
+round(prop.table(table(adult.data$score.of.aq10.adult))*100, digits = 1)  # highest % of scores are in range of 2-5
+round(prop.table(table(adult.data$who.completing.test))*100, digits = 1)  # Self: 74.1%
+round(prop.table(table(adult.data$has.autism.correct.response))*100, digits = 1)  # NO: 73.2%  YES: 26.8%
+length(adult.data)
+names.vec <- names(adult.data)
+names.vec
+names.vec[c(12,13,14,15,16,17,19,20)]
+names.vec <- names(adult.data)
+names.vec[c(12,13,14,15,16,17,19,20)]
+names.vec
+names.vec[12,13,14,15,16,17,19,20]
+for(i in c(12,13,14,15,16,17,19,20)){
+adult.data[,i] <- as.factor(adult.data[,i])
+}
+names.vec
+names.vec[c(12,13,14,15,16,17,19,20)]
