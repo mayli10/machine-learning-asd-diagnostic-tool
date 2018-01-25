@@ -15,6 +15,7 @@ str(adult.data)
 #further investigating data with a summary to see if anything else needs to be noted 
 summary(adult.data)
 #view data in data frame
+#View(adult.data)
 
 ### Features ###
 
@@ -24,59 +25,20 @@ colnames(adult.data) <- c("a1.score", "a2.score", "a3.score", "a4.score", "a5.sc
                           "screened.before", "score.of.aq10.adult", "age.category", "who.completing.test", 
                           "has.autism.correct.response")
 
-str(adult.data)
 
-for (i in 1:nrow(adult.data)) {
-  if (adult.data[i,10] == 1) {
-    adult.data[i,10] = 'done'
-    adult.data[i,18] = adult.data[i,18] - 1
-  }
-}
-adult.data$a10.score <- NULL
 
-str(adult.data)
-
-for (i in 1:nrow(adult.data)) {
-  if (adult.data[i,8] == 1) {
-    adult.data[i,8] = 'done'
-    adult.data[i,17] = adult.data[i,17] - 1
-  }
-}
-adult.data$a8.score <- NULL
+adult.data$age <- NULL
+adult.data$born.with.jaundice <- NULL
+adult.data$ethnicity <- NULL
+adult.data$country.of.residence <- NULL
+adult.data$screened.before <- NULL
+adult.data$who.completing.test <- NULL
+adult.data$age.category <- NULL
+adult.data$gender <- NULL
 
 str(adult.data)
 
-for (i in 1:nrow(adult.data)) {
-  if (adult.data[i,5] == 1) {
-    adult.data[i,5] = 'done'
-    adult.data[i,16] = adult.data[i,16] - 1
-  }
-}
-adult.data$a5.score <- NULL
 
-str(adult.data)
-
-for (i in 1:nrow(adult.data)) {
-if (adult.data[i,2] == 1) {
-  adult.data[i,2] = 'done'
-  adult.data[i,15] = adult.data[i,15] - 1
-}
-  }
-adult.data$a2.score <- NULL
-
-str(adult.data)
-
-for (i in 1:nrow(adult.data)) {
-if (adult.data[i,1] == 1) {
-  adult.data[i,1] = 'done'
-  adult.data[i,14] = adult.data[i,14] - 1
-  }
-}
-adult.data$a1.score <- NULL
-
-str(adult.data)
-
-# REMOVED A1.SCORE AND ADJUSTED TOTAL SCORE
 # a1.score: "I often notice small sounds when others do not"; 1 for yes, 0 for no
 # a2.score: "I usually concentrate more on the whole picture, rather than the small details"; 1 for yes, 0 for no
 # a3.score: "I find it easy to do more than one thing at once"; 1 for yes, 0 for no
@@ -106,15 +68,9 @@ str(adult.data)
 # updated summary
 summary(adult.data)
 #view data in data frame
+#View(adult.data)
 
 ### Proportion Tables of Features ###
-round(prop.table(table(adult.data$gender))*100, digits = 1)  # female:47.8%  male:52.2%               
-round(prop.table(table(adult.data$born.with.jaundice))*100, digits = 1)  # no: 90.2%  yes: 9.8%
-round(prop.table(table(adult.data$pdd.family.history))*100, digits = 1)  # no: 87.1%  yes: 12.9%
-round(prop.table(table(adult.data$screened.before))*100, digits = 1)  # no: 98.3%  yes: 1.7%
-round(prop.table(table(adult.data$score.of.aq10.adult))*100, digits = 1)  # highest % of scores are in range of 2-5
-round(prop.table(table(adult.data$who.completing.test))*100, digits = 1)  # Self: 74.1%
-round(prop.table(table(adult.data$has.autism.correct.response))*100, digits = 1)  # NO: 73.2%  YES: 26.8%
 
 # current length of raw data is 21 variables (columns)
 length(adult.data)
@@ -129,77 +85,17 @@ length(adult.data)
 
 ### Check for missing values ("?") ###
 
-# iterate through all the rows in age category, if there is missing data ("?") then set to NA
+
+
+# iterate through all the rows in ethnicity category, if there is missing data ("?") then set to NA
 for (i in 1:nrow(adult.data)) {
-  if (adult.data[i,6] == "?") {
-    adult.data[i,6] = NA
+  if (adult.data[i,11] == "?") {
+    adult.data[i,11] = NA
   }
 }
 
-str(adult.data)
-
-
-adult.data$age <- as.integer(adult.data$age)
-
-which(adult.data$age == '?')
-
-adult.data$gender <- as.factor(adult.data$gender)
-levels(adult.data$gender)
-
-names.vec <- names(adult.data)
-names.vec
-#gender, ethnicity, born.with.jaundice, pdd.family.history, country.of.residence, screened.before, who.completing.test, has.autism.correct.response
-names.vec[c(11,12,13,14,15,16,18,19)]
-
-for(i in c(7, 8, 9, 10, 11, 12, 15)){
-  adult.data[,i] <- as.factor(adult.data[,i])
-}
-levels(adult.data[,12])
-
-str(adult.data)
-table(adult.data$ethnicity)
-
-for(i in which(adult.data$ethnicity == "?")){
-  adult.data$ethnicity[i]  <- 'Others'
-}
-adult.data$ethnicity[658]
-levels(adult.data[,12])
-
-adult.data$ethnicity
-adult.data <- droplevels(adult.data)
-levels(adult.data[,12])
-adult.data <- droplevels(adult.data)
-levels(adult.data[,12])
-which(adult.data$ethnicity == "?")
-
-levels(adult.data$who.completing.test)
-
-levels(adult.data$who.completing.test)
-table(adult.data$who.completing.test)
-
-for(i in which(adult.data$who.completing.test == "?")) {
-  adult.data$who.completing.test[i] <- NA
-}
-
-levels(adult.data$who.completing.test)
-adult.data <- droplevels(adult.data)
-levels(adult.data$who.completing.test)
-
-for(i in which(adult.data$who.completing.test == "?")) {
-  adult.data$who.completing.test[i] <- NA
-}
-
-levels(adult.data$who.completing.test)
-adult.data <- droplevels(adult.data)
-levels(adult.data$who.completing.test)
-
-levels(adult.data$born.with.jaundice)
-levels(adult.data$pdd.family.history)
-
-adult.data$score.of.aq10.adult <- as.integer(adult.data$score.of.aq10.adult)
 adult.data$has.autism.correct.response <- as.factor(adult.data$has.autism.correct.response)
-adult.data$who.completing.test <- as.factor(adult.data$who.completing.test)
-
+adult.data$pdd.family.history <- as.factor(adult.data$pdd.family.history)
 
 str(adult.data)
 
@@ -227,11 +123,13 @@ round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they 
 
 # Storing model in adult.classifier
 # train data
-adult.classifier = naiveBayes(adult.data.train[, 1:14], adult.data.train$has.autism.correct.response)
+adult.classifier = naiveBayes(adult.data.train[, 1:12], adult.data.train$has.autism.correct.response)
 
 #test data
 adult.test.predicted = predict(adult.classifier,
-                               adult.data.test[, 1:14])
+                               adult.data.test[, 1:12])
+
+########## Analyzing Results ##########
 library(caret)
 
 actual.outcome = adult.data.test$has.autism.correct.response
@@ -245,11 +143,26 @@ confusionMatrix(actual.outcome,predicted.outcome)
 # accuracy rate: 1
 # error rate: 0
 
-########## Analyzing Results ##########
 
 #CrossTable() is from gmodels
 CrossTable(adult.test.predicted,
-           adult.data.test[,15],
+           adult.data.test[,13],
            prop.chisq = FALSE, # as before
            prop.t     = FALSE, # eliminate cell proprtions
            dnn        = c("predicted", "actual")) # relabels rows+cols
+
+
+#predicted to actual:
+#(Y/Y + N/N) / (Y/Y + N/N + Y/N + N/Y)
+a = (44+127)/(44+127+2+3) #0.9715909
+b = (56+119)/(56+119+0+1) #0.9943181
+c = (36+135)/(36+135+3+2) #0.97159
+d = (48+122)/(48+122+2+4) #0.965909
+e = (30+143)/(30+143+1+2) #0.98295
+f = (51+117)/(51+117+4+4) #0.954545
+g = (39+133)/(39+133+3+1) #0.9727272
+h = (43+131)/(43+131+2+0) #0.988636
+i = (43+129)/(43+129+1+3) #0.9722722
+j = (50+124)/(50+124+0+2) #0.988636
+avg = (a+b+c+d+e+f+g+h+i+j)/10
+avg #0.9772727
