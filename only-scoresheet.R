@@ -128,6 +128,19 @@ adult.test.predicted = predict(adult.classifier,
                                adult.data.test[, 1:11])
 
 ########## Analyzing Results ##########
+library(caret)
+
+actual.outcome = adult.data.test$has.autism.correct.response
+predicted.outcome = predict(adult.classifier, adult.data.test)
+
+actual.outcome
+predicted.outcome
+
+confusionMatrix(actual.outcome,predicted.outcome)
+#initial kappa value = 1
+# accuracy rate: 1
+# error rate: 0
+
 
 #CrossTable() is from gmodels
 CrossTable(adult.test.predicted,

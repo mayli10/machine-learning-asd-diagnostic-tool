@@ -172,9 +172,6 @@ predicted.outcome
 adult.test.predicted = predict(adult.classifier,
                                adult.data.test[, 1:2])
 
-confusionMatrix(actual.outcome,predicted.outcome)
-
-
 ########## Analyzing Results ##########
 
 length(adult.test.predicted)
@@ -187,30 +184,6 @@ CrossTable(adult.test.predicted,
            prop.t     = FALSE, # eliminate cell proprtions
            dnn        = c("predicted", "actual")) # relabels rows+cols
 
-
-# 100 - (5 / 703) = %99.9929  ---- this is the accuracy of the first train/test run
-
-first.run = 100 - (46 / 703) #99.99431
-first.run
-second.run = 100 - (5 / 703) #99.99289
-second.run
-third.run = 100 - (2 / 703) #99.99716
-third.run
-fourth.run = 100 - (5 / 703) #99.99289
-fourth.run
-fifth.run = 100 - (3 / 703) #99.99573
-fifth.run
-sixth.run = 100 - (14 / 703) #99.98009
-sixth.run
-seventh.run = 100 - (4 / 703) #99.99431
-seventh.run
-eighth.run = 100 - (7 / 703) #99.99004
-eighth.run
-ninth.run = 100 - (5 / 703) #99.99289
-ninth.run
-tenth.run = 100 - (6 / 703) #99.99147
-tenth.run
-
-avg = (first.run + second.run + third.run + fourth.run + fifth.run + sixth.run + seventh.run + eighth.run + ninth.run + tenth.run)/10
-avg
-# # avg = 99.99218
+confusionMatrix(actual.outcome,predicted.outcome)
+#initial kappa value = 0.126 POOR AGREEMENT: this means it is highly due to chance
+# accuracy rate: (120+8)/176 = 72.72%

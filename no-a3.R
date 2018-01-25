@@ -15,7 +15,6 @@ str(adult.data)
 #further investigating data with a summary to see if anything else needs to be noted 
 summary(adult.data)
 #view data in data frame
-View(adult.data)
 
 ### Features ###
 
@@ -65,7 +64,6 @@ str(adult.data)
 # updated summary
 summary(adult.data)
 #view data in data frame
-View(adult.data)
 
 ### Proportion Tables of Features ###
 round(prop.table(table(adult.data$gender))*100, digits = 1)  # female:47.8%  male:52.2%               
@@ -128,7 +126,6 @@ levels(adult.data[,12])
 which(adult.data$ethnicity == "?")
 
 levels(adult.data$who.completing.test)
-View(adult.data)
 
 levels(adult.data$who.completing.test)
 table(adult.data$who.completing.test)
@@ -179,6 +176,18 @@ adult.classifier = naiveBayes(adult.data.train[, 1:18], adult.data.train$has.aut
 #test data
 adult.test.predicted = predict(adult.classifier,
                                adult.data.test[, 1:18])
+library(caret)
+
+actual.outcome = adult.data.test$has.autism.correct.response
+predicted.outcome = predict(adult.classifier, adult.data.test)
+
+actual.outcome
+predicted.outcome
+
+confusionMatrix(actual.outcome,predicted.outcome)
+#initial kappa value = 1
+# accuracy rate: 1
+# error rate: 0
 
 ########## Analyzing Results ##########
 
@@ -192,20 +201,20 @@ CrossTable(adult.test.predicted,
 
 # 100 - (5 / 703) = %99.9929  ---- this is the accuracy of the first train/test run
 
-first.run = 100 - (10 / 703) #99.98578
-second.run = 100 - (8 / 703) #99.98862
-third.run = 100 - (5 / 703) #99.99289
-fourth.run = 100 - (6 / 703) #99.99147
-fifth.run = 100 - (6 / 703) #99.99147
-sixth.run = 100 - (5 / 703) #99.99289
-seventh.run = 100 - (6 / 703) #99.99147
-eighth.run = 100 - (10 / 703) #99.98578
-ninth.run = 100 - (3 / 703) #99.99573
-tenth.run = 100 - (6 / 703) #99.99147
+first.run = 1 - (9/176) #99.98578
+first.run
+second.run = 1 - (5 / 176) #99.98862
+third.run = 1 - (7 / 176) #99.99289
+fourth.run = 1 - (8 / 176) #99.99147
+fifth.run = 1 - (9 / 176) #99.99147
+sixth.run = 1 - (8 / 176) #99.99289
+seventh.run = 1 - (9 / 176) #99.99147
+eighth.run = 1 - (10 / 176) #99.98578
+ninth.run = 1 - (5 / 176) #99.99573
+tenth.run = 1 - (9 / 176) #99.99147
 
 avg = (first.run + second.run + third.run + fourth.run + fifth.run + sixth.run + seventh.run + eighth.run + ninth.run + tenth.run)/10
-# avg = 99.99075
-
+avg #.9551136
 adult.classifier$apriori
 adult.classifier$tables # learn how to interpret these tables
 

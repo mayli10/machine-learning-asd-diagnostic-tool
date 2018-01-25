@@ -15,7 +15,6 @@ str(adult.data)
 #further investigating data with a summary to see if anything else needs to be noted 
 summary(adult.data)
 #view data in data frame
-#View(adult.data)
 
 ### Features ###
 
@@ -26,27 +25,13 @@ colnames(adult.data) <- c("a1.score", "a2.score", "a3.score", "a4.score", "a5.sc
                           "has.autism.correct.response")
 
 
-
-adult.data$a1.score <- NULL
-adult.data$a2.score <- NULL
-adult.data$a3.score <- NULL
+for (i in 1:nrow(adult.data)) {
+  if (adult.data[i,4] == 1) {
+    adult.data[i,4] = 'done'
+    adult.data[i,18] = adult.data[i,18] - 1
+  }
+}
 adult.data$a4.score <- NULL
-adult.data$a5.score <- NULL
-adult.data$a6.score <- NULL
-adult.data$a7.score <- NULL
-adult.data$a8.score <- NULL
-adult.data$a9.score <- NULL
-adult.data$a10.score <- NULL
-adult.data$score.of.aq10.adult <- NULL
-adult.data$age <- NULL
-adult.data$gender <- NULL
-adult.data$ethnicity <- NULL
-adult.data$born.with.jaundice <- NULL
-adult.data$pdd.family.history <- NULL
-adult.data$screened.before <- NULL
-adult.data$age.category <- NULL
-
-str(adult.data)
 
 
 # REMOVED A1.SCORE AND ADJUSTED TOTAL SCORE
@@ -79,10 +64,13 @@ str(adult.data)
 # updated summary
 summary(adult.data)
 #view data in data frame
-#View(adult.data)
 
 ### Proportion Tables of Features ###
-
+round(prop.table(table(adult.data$gender))*100, digits = 1)  # female:47.8%  male:52.2%               
+round(prop.table(table(adult.data$born.with.jaundice))*100, digits = 1)  # no: 90.2%  yes: 9.8%
+round(prop.table(table(adult.data$pdd.family.history))*100, digits = 1)  # no: 87.1%  yes: 12.9%
+round(prop.table(table(adult.data$screened.before))*100, digits = 1)  # no: 98.3%  yes: 1.7%
+round(prop.table(table(adult.data$score.of.aq10.adult))*100, digits = 1)  # highest % of scores are in range of 2-5
 round(prop.table(table(adult.data$who.completing.test))*100, digits = 1)  # Self: 74.1%
 round(prop.table(table(adult.data$has.autism.correct.response))*100, digits = 1)  # NO: 73.2%  YES: 26.8%
 
@@ -100,9 +88,44 @@ length(adult.data)
 ### Check for missing values ("?") ###
 
 # iterate through all the rows in age category, if there is missing data ("?") then set to NA
+for (i in 1:nrow(adult.data)) {
+  if (adult.data[i,10] == "?") {
+    adult.data[i,10] = NA
+  }
+}
+
+adult.data$age <- as.integer(adult.data$age)
+
+adult.data$gender <- as.factor(adult.data$gender)
+levels(adult.data$gender)
+
+names.vec <- names(adult.data)
+names.vec
+#gender, ethnicity, born.with.jaundice, pdd.family.history, country.of.residence, screened.before, who.completing.test, has.autism.correct.response
+names.vec[c(11,12,13,14,15,16,18,19)]
+
+for(i in c(11,12,13,14,15,16,18,19)){
+  adult.data[,i] <- as.factor(adult.data[,i])
+}
+levels(adult.data[,12])
+
+str(adult.data)
+table(adult.data$ethnicity)
+
+for(i in which(adult.data$ethnicity == "?")){
+  adult.data$ethnicity[i]  <- 'Others'
+}
+adult.data$ethnicity[658]
+levels(adult.data[,12])
+
+adult.data$ethnicity
+adult.data <- droplevels(adult.data)
+levels(adult.data[,12])
+adult.data <- droplevels(adult.data)
+levels(adult.data[,12])
+which(adult.data$ethnicity == "?")
 
 levels(adult.data$who.completing.test)
-#View(adult.data)
 
 levels(adult.data$who.completing.test)
 table(adult.data$who.completing.test)
@@ -123,18 +146,8 @@ levels(adult.data$who.completing.test)
 adult.data <- droplevels(adult.data)
 levels(adult.data$who.completing.test)
 
-names.vec <- names(adult.data)
-names.vec
-#gender, ethnicity, born.with.jaundice, pdd.family.history, country.of.residence, screened.before, who.completing.test, has.autism.correct.response
-
-
-adult.data$who.completing.test <- as.factor(adult.data$who.completing.test)
-adult.data$country.of.residence <- as.factor(adult.data$country.of.residence)
-adult.data$has.autism.correct.response <- as.factor(adult.data$has.autism.correct.response)
-
-
-levels(adult.data)
-str(adult.data)
+levels(adult.data$born.with.jaundice)
+levels(adult.data$pdd.family.history)
 
 ########## Splitting Data into Testing & Training Sets ##########
 
@@ -153,15 +166,17 @@ adult.data.test  = adult.data[(threeFourths+1):nrow(adult.data), ] # the rest
 round(prop.table(table(adult.data.train$has.autism.correct.response))*100)
 round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they are similar
 
+
 ########## Using Bayes theorem ##########
-library(caret)
 
 # Storing model in adult.classifier
 # train data
-adult.classifier = naiveBayes(adult.data.train[, 1:2], adult.data.train$has.autism.correct.response)
+adult.classifier = naiveBayes(adult.data.train[, 1:18], adult.data.train$has.autism.correct.response)
 
-adult.classifier
 #test data
+adult.test.predicted = predict(adult.classifier,
+                               adult.data.test[, 1:18])
+library(caret)
 
 actual.outcome = adult.data.test$has.autism.correct.response
 predicted.outcome = predict(adult.classifier, adult.data.test)
@@ -169,20 +184,16 @@ predicted.outcome = predict(adult.classifier, adult.data.test)
 actual.outcome
 predicted.outcome
 
-adult.test.predicted = predict(adult.classifier,
-                               adult.data.test[, 1:2])
-
 confusionMatrix(actual.outcome,predicted.outcome)
-
+#initial kappa value = 1
+# accuracy rate: 1
+# error rate: 0
 
 ########## Analyzing Results ##########
 
-length(adult.test.predicted)
-length(adult.data.test[,3])
-
 #CrossTable() is from gmodels
 CrossTable(adult.test.predicted,
-           adult.data.test[,3],
+           adult.data.test[,19],
            prop.chisq = FALSE, # as before
            prop.t     = FALSE, # eliminate cell proprtions
            dnn        = c("predicted", "actual")) # relabels rows+cols
@@ -190,27 +201,19 @@ CrossTable(adult.test.predicted,
 
 # 100 - (5 / 703) = %99.9929  ---- this is the accuracy of the first train/test run
 
-first.run = 100 - (46 / 703) #99.99431
+first.run = 1 - (9/176) #99.98578
 first.run
-second.run = 100 - (5 / 703) #99.99289
-second.run
-third.run = 100 - (2 / 703) #99.99716
-third.run
-fourth.run = 100 - (5 / 703) #99.99289
-fourth.run
-fifth.run = 100 - (3 / 703) #99.99573
-fifth.run
-sixth.run = 100 - (14 / 703) #99.98009
-sixth.run
-seventh.run = 100 - (4 / 703) #99.99431
-seventh.run
-eighth.run = 100 - (7 / 703) #99.99004
-eighth.run
-ninth.run = 100 - (5 / 703) #99.99289
-ninth.run
-tenth.run = 100 - (6 / 703) #99.99147
-tenth.run
+second.run = 1 - (5 / 176) #99.98862
+third.run = 1 - (7 / 176) #99.99289
+fourth.run = 1 - (8 / 176) #99.99147
+fifth.run = 1 - (9 / 176) #99.99147
+sixth.run = 1 - (8 / 176) #99.99289
+seventh.run = 1 - (9 / 176) #99.99147
+eighth.run = 1 - (10 / 176) #99.98578
+ninth.run = 1 - (5 / 176) #99.99573
+tenth.run = 1 - (9 / 176) #99.99147
 
 avg = (first.run + second.run + third.run + fourth.run + fifth.run + sixth.run + seventh.run + eighth.run + ninth.run + tenth.run)/10
-avg
-# # avg = 99.99218
+avg #.9551136
+adult.classifier$apriori
+adult.classifier$tables # learn how to interpret these tables

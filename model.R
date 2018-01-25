@@ -151,6 +151,21 @@ round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #yes, 
 #View(adult.data)
 adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
 
+library(caret)
+
+actual.outcome = adult.data.test$has.autism.correct.response
+predicted.outcome = predict(adult.classifier, adult.data.test)
+
+actual.outcome
+predicted.outcome
+
+confusionMatrix(actual.outcome,predicted.outcome)
+#initial kappa value = 0.011 POOR AGREEMENT: this means it is highly due to chance
+# accuracy rate: 68.75%
+(46+124)/176
+# error rate: 31.25%
+1-((46+124)/176)
+
 #test data with the predict function using the trained data
 adult.test.predicted = predict(adult.classifier,
                              adult.data.test[, 1:19])
@@ -163,7 +178,6 @@ CrossTable(adult.test.predicted,
            prop.chisq = FALSE, # as before
            prop.t     = FALSE, # eliminate cell proprtions
            dnn        = c("predicted", "actual")) # relabels rows+cols
-
 
 ### Trained and tested 10 rounds and found the prediction accuracy of the model ###
 
@@ -184,6 +198,13 @@ avg = (a+b+c+d+e+f+g+h+i+j)/10
 #avg = 0.980113636
 
 #The model predicted if a user has autism at an average accuracy of 98%
+
+# The error percentage is calculated as:
+error = (3 + 7)/(30+20+20+106)
+
+
+# calculate confusion matrix
+confusionMatrix(actual.outcome,predicted.outcome)
 
 ##### More information on individual features #####
 adult.classifier$apriori

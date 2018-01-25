@@ -171,6 +171,8 @@ threeFourths
 adult.data.train = adult.data[1:threeFourths, ] # about 75%
 adult.data.test  = adult.data[(threeFourths+1):nrow(adult.data), ] # the rest
 
+
+
 #typeof(adult.data$a1.score)
 #adult.data$a1.score
 
@@ -197,6 +199,23 @@ CrossTable(adult.test.predicted,
            prop.t     = FALSE, # eliminate cell proprtions
            dnn        = c("predicted", "actual")) # relabels rows+cols
 
+library(caret)
+
+actual.outcome = adult.data.test$has.autism.correct.response
+predicted.outcome = predict(adult.classifier, adult.data.test)
+
+actual.outcome
+predicted.outcome
+
+confusionMatrix(actual.outcome,predicted.outcome)
+#initial kappa value = 0.011 POOR AGREEMENT: this means it is highly due to chance
+# accuracy rate: 68.75%
+(46+124)/176
+# error rate: 31.25%
+1-((46+124)/176)
+
+
+
 #predicted to actual:
 #(Y/Y + N/N) / (Y/Y + N/N + Y/N + N/Y)
 a = (28+98)/(28+98+28+22) #0.71590
@@ -213,7 +232,6 @@ avg = (a+b+c+d+e+f+g+h+i+j)/10
 avg #0.7181818
 
 # 100 - (5 / 703) = %99.9929  ---- this is the accuracy of the first train/test run
-
 
 adult.classifier$apriori
 adult.classifier$tables # learn how to interpret these tables

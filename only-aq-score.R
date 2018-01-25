@@ -37,14 +37,15 @@ adult.data$a7.score <- NULL
 adult.data$a8.score <- NULL
 adult.data$a9.score <- NULL
 adult.data$a10.score <- NULL
-adult.data$score.of.aq10.adult <- NULL
-adult.data$age <- NULL
-adult.data$gender <- NULL
+adult.data$screened.before <- NULL
 adult.data$ethnicity <- NULL
 adult.data$born.with.jaundice <- NULL
 adult.data$pdd.family.history <- NULL
-adult.data$screened.before <- NULL
+adult.data$country.of.residence <- NULL
 adult.data$age.category <- NULL
+adult.data$age <- NULL
+adult.data$gender <- NULL
+adult.data$who.completing.test <- NULL
 
 str(adult.data)
 
@@ -81,60 +82,9 @@ summary(adult.data)
 #view data in data frame
 #View(adult.data)
 
-### Proportion Tables of Features ###
-
-round(prop.table(table(adult.data$who.completing.test))*100, digits = 1)  # Self: 74.1%
-round(prop.table(table(adult.data$has.autism.correct.response))*100, digits = 1)  # NO: 73.2%  YES: 26.8%
-
-# current length of raw data is 21 variables (columns)
-length(adult.data)
-
-########## Cleaning the Raw Data ##########
-
-# Since all variables in the age.category is "18 and more", this data is not useful for model
-adult.data$age.category <- NULL
-
-# updated length of data is now 20 variables (columns)
-length(adult.data)
-
-### Check for missing values ("?") ###
-
-# iterate through all the rows in age category, if there is missing data ("?") then set to NA
-
-levels(adult.data$who.completing.test)
-#View(adult.data)
-
-levels(adult.data$who.completing.test)
-table(adult.data$who.completing.test)
-
-for(i in which(adult.data$who.completing.test == "?")) {
-  adult.data$who.completing.test[i] <- NA
-}
-
-levels(adult.data$who.completing.test)
-adult.data <- droplevels(adult.data)
-levels(adult.data$who.completing.test)
-
-for(i in which(adult.data$who.completing.test == "?")) {
-  adult.data$who.completing.test[i] <- NA
-}
-
-levels(adult.data$who.completing.test)
-adult.data <- droplevels(adult.data)
-levels(adult.data$who.completing.test)
-
-names.vec <- names(adult.data)
-names.vec
-#gender, ethnicity, born.with.jaundice, pdd.family.history, country.of.residence, screened.before, who.completing.test, has.autism.correct.response
-
-
-adult.data$who.completing.test <- as.factor(adult.data$who.completing.test)
-adult.data$country.of.residence <- as.factor(adult.data$country.of.residence)
 adult.data$has.autism.correct.response <- as.factor(adult.data$has.autism.correct.response)
 
-
-levels(adult.data)
-str(adult.data)
+table(adult.data$who.completing.test)
 
 ########## Splitting Data into Testing & Training Sets ##########
 
@@ -153,15 +103,19 @@ adult.data.test  = adult.data[(threeFourths+1):nrow(adult.data), ] # the rest
 round(prop.table(table(adult.data.train$has.autism.correct.response))*100)
 round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they are similar
 
+
 ########## Using Bayes theorem ##########
-library(caret)
 
 # Storing model in adult.classifier
 # train data
-adult.classifier = naiveBayes(adult.data.train[, 1:2], adult.data.train$has.autism.correct.response)
+adult.classifier = naiveBayes(adult.data.train[, 1:1], adult.data.train$has.autism.correct.response)
 
-adult.classifier
 #test data
+adult.test.predicted = predict(adult.classifier,
+                               adult.data.test[, 1:1])
+adult.test.predicted
+
+library(caret)
 
 actual.outcome = adult.data.test$has.autism.correct.response
 predicted.outcome = predict(adult.classifier, adult.data.test)
@@ -169,48 +123,16 @@ predicted.outcome = predict(adult.classifier, adult.data.test)
 actual.outcome
 predicted.outcome
 
-adult.test.predicted = predict(adult.classifier,
-                               adult.data.test[, 1:2])
-
 confusionMatrix(actual.outcome,predicted.outcome)
-
+#initial kappa value = 1
+# accuracy rate: 1
+# error rate: 0
 
 ########## Analyzing Results ##########
 
-length(adult.test.predicted)
-length(adult.data.test[,3])
-
 #CrossTable() is from gmodels
 CrossTable(adult.test.predicted,
-           adult.data.test[,3],
+           adult.data.test[,2],
            prop.chisq = FALSE, # as before
            prop.t     = FALSE, # eliminate cell proprtions
            dnn        = c("predicted", "actual")) # relabels rows+cols
-
-
-# 100 - (5 / 703) = %99.9929  ---- this is the accuracy of the first train/test run
-
-first.run = 100 - (46 / 703) #99.99431
-first.run
-second.run = 100 - (5 / 703) #99.99289
-second.run
-third.run = 100 - (2 / 703) #99.99716
-third.run
-fourth.run = 100 - (5 / 703) #99.99289
-fourth.run
-fifth.run = 100 - (3 / 703) #99.99573
-fifth.run
-sixth.run = 100 - (14 / 703) #99.98009
-sixth.run
-seventh.run = 100 - (4 / 703) #99.99431
-seventh.run
-eighth.run = 100 - (7 / 703) #99.99004
-eighth.run
-ninth.run = 100 - (5 / 703) #99.99289
-ninth.run
-tenth.run = 100 - (6 / 703) #99.99147
-tenth.run
-
-avg = (first.run + second.run + third.run + fourth.run + fifth.run + sixth.run + seventh.run + eighth.run + ninth.run + tenth.run)/10
-avg
-# # avg = 99.99218

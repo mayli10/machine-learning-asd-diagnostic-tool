@@ -15,7 +15,7 @@ str(adult.data)
 #further investigating data with a summary to see if anything else needs to be noted 
 summary(adult.data)
 #view data in data frame
-View(adult.data)
+#View(adult.data)
 
 ### Features ###
 
@@ -54,7 +54,7 @@ str(adult.data)
 # updated summary
 summary(adult.data)
 #view data in data frame
-View(adult.data)
+#View(adult.data)
 
 ### Proportion Tables of Features ###
 round(prop.table(table(adult.data$gender))*100, digits = 1)  # female:47.8%  male:52.2%               
@@ -72,6 +72,8 @@ length(adult.data)
 
 # Since all variables in the age.category is "18 and more", this data is not useful for model
 adult.data$age.category <- NULL
+adult.data$born.with.jaundice <- NULL
+
 
 # updated length of data is now 20 variables (columns)
 length(adult.data)
@@ -85,60 +87,43 @@ for (i in 1:nrow(adult.data)) {
   }
 }
 
-adult.data$age <- as.integer(adult.data$age)
-
-adult.data$gender <- as.factor(adult.data$gender)
-levels(adult.data$gender)
-
-names.vec <- names(adult.data)
-names.vec
-names.vec[c(12,13,14,15,16,17,19,20)]
-
-for(i in c(12,13,14,15,16,17,19,20)){
-  adult.data[,i] <- as.factor(adult.data[,i])
-}
-levels(adult.data[,13])
-
-str(adult.data)
-table(adult.data$ethnicity)
-
+#if there is a "?" in ethnicity, put the value into Others category
 for(i in which(adult.data$ethnicity == "?")){
   adult.data$ethnicity[i]  <- 'Others'
 }
-adult.data$ethnicity[658]
-levels(adult.data[,13])
-
-adult.data$ethnicity
-adult.data <- droplevels(adult.data)
-levels(adult.data[,13])
-adult.data <- droplevels(adult.data)
-levels(adult.data[,13])
 which(adult.data$ethnicity == "?")
+str(adult.data)
 
-levels(adult.data$who.completing.test)
-View(adult.data)
-
-levels(adult.data$who.completing.test)
-table(adult.data$who.completing.test)
-
-for(i in which(adult.data$who.completing.test == "?")) {
-  adult.data$who.completing.test[i] <- NA
+#if there is a "?" in who.completing.test, set the value to be NA
+for(i in which(adult.data$who.completing.test == "?")){
+  adult.data$who.completing.test[i]  <- NA
 }
+which(adult.data$ethnicity == "?")
+str(adult.data)
 
-levels(adult.data$who.completing.test)
-adult.data <- droplevels(adult.data)
-levels(adult.data$who.completing.test)
+#check if there are any ? left in the data
+which(adult.data == "?")
 
-for(i in which(adult.data$who.completing.test == "?")) {
-  adult.data$who.completing.test[i] <- NA
+### Setting factors and integers ### 
+
+#set the age value to be an integer
+adult.data$age <- as.integer(adult.data$age)
+
+levels(adult.data$gender)
+
+#get the non-numeric features
+names.vec <- names(adult.data)
+
+#gender, ethnicity, born.with.jaundice, pdd.family.history, country.of.residence, screened.before, who.completing.test, has.autism.correct.response
+names <- names.vec[c(12,13,14,15,16,17,19,20)]
+
+#set the non-numeric features as factors
+for(i in c(12,13,14,15,16,17,19,20)){
+  adult.data[,i] <- as.factor(adult.data[,i])
 }
-
-levels(adult.data$who.completing.test)
-adult.data <- droplevels(adult.data)
-levels(adult.data$who.completing.test)
-
-levels(adult.data$born.with.jaundice)
-levels(adult.data$pdd.family.history)
+#check the data to see that this has updated
+levels(adult.data)
+str(adult.data)
 
 ########## Splitting Data into Testing & Training Sets ##########
 
@@ -146,40 +131,79 @@ levels(adult.data$pdd.family.history)
 adult.data <- adult.data[sample(nrow(adult.data)),]
 adult.data
 
-threeFourths <- round(704*.75)
+#train the model on 75% of data and test the model on 25% of the data
+threeFourths <- round(703*.75)
 threeFourths
 adult.data.train = adult.data[1:threeFourths, ] # about 75%
 adult.data.test  = adult.data[(threeFourths+1):nrow(adult.data), ] # the rest
 
-typeof(adult.data$a1.score)
-adult.data$a1.score
-
+#check and see if the number of test and train data are similar for both
 round(prop.table(table(adult.data.train$has.autism.correct.response))*100)
-round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they are similar
+round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #yes, they are similar
 
 
 ########## Using Bayes theorem ##########
 
 # Storing model in adult.classifier
-# train data
+# train data using Bayes theorem which is p(A|B) = (p(B|A)*p(A)) / p(B)
+#View(adult.data)
 adult.classifier = naiveBayes(adult.data.train[, 1:19], adult.data.train$has.autism.correct.response)
 
-#test data
+library(caret)
+
+actual.outcome = adult.data.test$has.autism.correct.response
+predicted.outcome = predict(adult.classifier, adult.data.test)
+
+actual.outcome
+predicted.outcome
+
+confusionMatrix(actual.outcome,predicted.outcome)
+#initial kappa value = 1
+# accuracy rate: 1
+# error rate: 0
+
+
+#test data with the predict function using the trained data
 adult.test.predicted = predict(adult.classifier,
-                               adult.data.test[, 1:19])
+                               adult.data.test[, 1:18])
 
 ########## Analyzing Results ##########
 
-#CrossTable() is from gmodels
+#CrossTable() is from gmodels, displays results
 CrossTable(adult.test.predicted,
-           adult.data.test[,20],
+           adult.data.test[,19],
            prop.chisq = FALSE, # as before
            prop.t     = FALSE, # eliminate cell proprtions
            dnn        = c("predicted", "actual")) # relabels rows+cols
 
+### Trained and tested 10 rounds and found the prediction accuracy of the model ###
 
-# 100 - (5 / 704) = %99.9929  ---- this is the accuracy of the first train/test run
+#predicted to actual:
+#(Y/Y + N/N) / (Y/Y + N/N + Y/N + N/Y)
+a = (42+132)/(176) #0.9829545
+b = (55+121)/(176) #0.988636
+c = (42+133)/(176) #0.9659091
+d = (46+130)/(176) #0.971509
+e = (49+126)/(176) #0.982959
+f = (49+123)/(176) #0.9772727
+g = (45+131)/(176) #0.9829545
+h = (47+128)/(176) #0.988636
+i = (46+130)/(176) #0.977727
+j = (44+132)/(176) #0.9829545
+avg = (a+b+c+d+e+f+g+h+i+j)/10
+#avg = 0.980113636
 
+#The model predicted if a user has autism at an average accuracy of 98%
+
+# The error percentage is calculated as:
+error = (3 + 7)/(30+20+20+106)
+
+avg
+# calculate confusion matrix
+confusionMatrix(actual.outcome,predicted.outcome)
+
+##### More information on individual features #####
 adult.classifier$apriori
-adult.classifier$tables # learn how to interpret these tables
+adult.classifier$tables 
+
 

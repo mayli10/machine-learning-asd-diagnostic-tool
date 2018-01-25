@@ -5,6 +5,8 @@ library(e1071)
 #caTools package for splitting train / test data
 library(caTools)
 
+#install.packages('caret')
+
 ########## Exploring the Raw Data ##########
 
 #reads raw data from adult.data.csv into a data frame and prevents strings from becoming factors
@@ -105,19 +107,9 @@ for (i in 1:nrow(adult.data)) {
 }
 
 adult.data$age <- as.integer(adult.data$age)
-
+adult.data$has.autism.correct.response <- as.factor(adult.data$has.autism.correct.response)
 adult.data$gender <- as.factor(adult.data$gender)
 levels(adult.data$gender)
-
-names.vec <- names(adult.data)
-names.vec
-#gender, ethnicity, born.with.jaundice, pdd.family.history, country.of.residence, screened.before, who.completing.test, has.autism.correct.response
-names.vec[c(2)]
-
-for(i in c(2,3)){
-  adult.data[,i] <- as.factor(adult.data[,i])
-}
-levels(adult.data[,2])
 
 str(adult.data)
 
@@ -132,6 +124,7 @@ threeFourths
 adult.data.train = adult.data[1:threeFourths, ] # about 75%
 adult.data.test  = adult.data[(threeFourths+1):nrow(adult.data), ] # the rest
 
+
 #typeof(adult.data$a1.score)
 #adult.data$a1.score
 
@@ -145,9 +138,29 @@ round(prop.table(table(adult.data.test$has.autism.correct.response))*100) #they 
 # train data
 adult.classifier = naiveBayes(adult.data.train[, 1:2], adult.data.train$has.autism.correct.response)
 
+actual.outcome = adult.data.test$has.autism.correct.response
+predicted.outcome = predict(adult.classifier, adult.data.test)
+
+actual.outcome
+predicted.outcome
+library(caret)
+
+actual.outcome = adult.data.test$has.autism.correct.response
+predicted.outcome = predict(adult.classifier, adult.data.test)
+
+actual.outcome
+predicted.outcome
+
+confusionMatrix(actual.outcome,predicted.outcome)
+#initial kappa value = 0.011 POOR AGREEMENT: this means it is highly due to chance
+# accuracy rate: 68.75%
+(4+117)/176
+# error rate: 31.25%
+1-((4+117)/176)
+
 #test data
 adult.test.predicted = predict(adult.classifier,
-                               adult.data.test[, 1:2])
+                               adult.data.test)
 
 ########## Analyzing Results ##########
 
@@ -175,8 +188,7 @@ c(a, b, c, d, e, f, g, h, i, j)
 avg = (a+b+c+d+e+f+g+h+i+j)/10
 avg #0.7164773
 
+confusionMatrix(actual.outcome,predicted.outcome)
 
 adult.classifier$apriori
-adult.classifier$tables # learn how to interpret these tables
-
-# 100 - (5 / 703) = %99.9929  ---- this is the accuracy without the a2.score
+adult.classifier$tables
