@@ -26,14 +26,57 @@ colnames(adult.data) <- c("a1.score", "a2.score", "a3.score", "a4.score", "a5.sc
 
 
 for (i in 1:nrow(adult.data)) {
-  if (adult.data[i,7] == 1) {
-    adult.data[i,7] = 'done'
+  if (adult.data[i,10] == 1) {
+    adult.data[i,10] = 'done'
     adult.data[i,18] = adult.data[i,18] - 1
   }
 }
-adult.data$a7.score <- NULL
+adult.data$a10.score <- NULL
 
+for (i in 1:nrow(adult.data)) {
+  if (adult.data[i,8] == 1) {
+    adult.data[i,8] = 'done'
+    adult.data[i,17] = adult.data[i,17] - 1
+  }
+}
+adult.data$a8.score <- NULL
 
+str(adult.data)
+for (i in 1:nrow(adult.data)) {
+  if (adult.data[i,5] == 1) {
+    adult.data[i,5] = 'done'
+    adult.data[i,16] = adult.data[i,16] - 1
+  }
+}
+adult.data$a5.score <- NULL
+
+for (i in 1:nrow(adult.data)) {
+  if (adult.data[i,4] == 1) {
+    adult.data[i,4] = 'done'
+    adult.data[i,15] = adult.data[i,15] - 1
+  }
+}
+adult.data$a4.score <- NULL
+
+for (i in 1:nrow(adult.data)) {
+if (adult.data[i,2] == 1) {
+  adult.data[i,2] = 'done'
+  adult.data[i,14] = adult.data[i,14] - 1
+}
+  }
+adult.data$a4.score <- NULL
+
+for (i in 1:nrow(adult.data)) {
+if (adult.data[i,1] == 1) {
+  adult.data[i,1] = 'done'
+  adult.data[i,13] = adult.data[i,13] - 1
+  }
+}
+adult.data$a1.score <- NULL
+
+str(adult.data)
+
+adult.data[i,13]
 # REMOVED A1.SCORE AND ADJUSTED TOTAL SCORE
 # a1.score: "I often notice small sounds when others do not"; 1 for yes, 0 for no
 # a2.score: "I usually concentrate more on the whole picture, rather than the small details"; 1 for yes, 0 for no
@@ -197,4 +240,3 @@ CrossTable(adult.test.predicted,
            prop.chisq = FALSE, # as before
            prop.t     = FALSE, # eliminate cell proprtions
            dnn        = c("predicted", "actual")) # relabels rows+cols
-

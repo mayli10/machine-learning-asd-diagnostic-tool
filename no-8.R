@@ -26,12 +26,12 @@ colnames(adult.data) <- c("a1.score", "a2.score", "a3.score", "a4.score", "a5.sc
 
 
 for (i in 1:nrow(adult.data)) {
-  if (adult.data[i,7] == 1) {
-    adult.data[i,7] = 'done'
+  if (adult.data[i,8] == 1) {
+    adult.data[i,8] = 'done'
     adult.data[i,18] = adult.data[i,18] - 1
   }
 }
-adult.data$a7.score <- NULL
+adult.data$a8.score <- NULL
 
 
 # REMOVED A1.SCORE AND ADJUSTED TOTAL SCORE
