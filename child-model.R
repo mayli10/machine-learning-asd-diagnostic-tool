@@ -29,18 +29,17 @@ colnames(child.data) <- c("a1.score", "a2.score", "a3.score", "a4.score", "a5.sc
                            "screened.before", "score.of.aq10.child", "age.category", "who.completing.test", 
                            "has.autism.correct.response")
 
-# a1.score: "I often notice small sounds when others do not"; 1 for yes, 0 for no
-# a2.score: "I usually concentrate more on the whole picture, rather than the small details"; 1 for yes, 0 for no
-# a3.score: "I find it easy to do more than one thing at once"; 1 for yes, 0 for no
-# a4.score: "If there is an interruption, I can switch back to what I was doing very quickly"; 1 for yes, 0 for no
-# a5.score: "I find it easy to ‘read between the lines’ when someone is talking to me"; 1 for yes, 0 for no
-# a6.score: "I know how to tell if someone listening to me is getting bored"; 1 for yes, 0 for no
-# a7.score: "When I’m reading a story I find it difficult to work out the characters’ intentions"; 1 for yes, 0 for no
-# a8.score: "I like to collect information about categories of things (e.g. types of car, types of bird, types of train, 
-# types of plant etc)"; 1 for yes, 0 for no
-# a9.score: "I find it easy to work out what someone is thinking or feeling just by looking at their face"; 
+# a1.score: "S/he often notices small sounds when others do not"; 1 for yes, 0 for no
+# a2.score: "S/he usually concentrates more on the whole picture, rather than the small details"; 1 for yes, 0 for no
+# a3.score: "In a social group, s/he can easily keep track of several different people’s conversations"; 1 for yes, 0 for no
+# a4.score: "S/he finds it easy to go back and forth between different activities"; 1 for yes, 0 for no
+# a5.score: "S/he doesn’t know how to keep a conversation going with his/her peers"; 1 for yes, 0 for no
+# a6.score: "S/he is good at social chit-chat"; 1 for yes, 0 for no
+# a7.score: "When s/he is read a story, s/he finds it difficult to work out the character’s intentions or feelings"; 1 for yes, 0 for no
+# a8.score: "When s/he was in preschool, s/he used to enjoy playing games involving pretending with other children"; 1 for yes, 0 for no
+# a9.score: "S/he finds it easy to work out what someone is thinking or feeling just by looking at their face"; 
 # 1 for yes, 0 for no
-# a10.score: "I find it difficult to work out people’s intentions"; 1 for yes, 0 for no
+# a10.score: "S/he finds it hard to make new friends"; 1 for yes, 0 for no
 # age: an integer value for number of years
 # gender: a string of male or female
 # ethnicity: a string from list of common ethnicities
